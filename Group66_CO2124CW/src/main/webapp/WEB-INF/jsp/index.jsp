@@ -296,7 +296,7 @@
         }
     }
 
-    // --- DATA LOGIC ---
+    // --- DATA LOGIC ----
 
     let allEmployees = [];
 
@@ -318,12 +318,12 @@
                 renderTable(allEmployees);
                 document.getElementById('employeeCount').innerText = data.employeeCount;
 
-                // FIX: Hide login, show the NEW main shell
+                // Hide login, show the NEW main shell
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('main-app-area').classList.remove('hidden');
 
             } else if (response.status === 401) {
-                // FIX: Show login, hide the NEW main shell
+                //Show login, hide the NEW main shell
                 document.getElementById('login-section').classList.remove('hidden');
                 document.getElementById('main-app-area').classList.add('hidden');
             }
@@ -685,7 +685,7 @@
                 const departments = await response.json();
                 renderDeptTable(departments);
 
-                // FIX: Used the 'isHR' variable defined at the top instead of 'currentUserRole'
+
                 if (isHR) {
                     const btn = document.getElementById('addDeptBtn');
                     if (btn) btn.style.display = 'block';
@@ -751,9 +751,9 @@
         } catch (err) { console.error(err); }
     }
 
-    // FIX: Combined your DOMContentLoaded and window.onload to prevent double-loading
+
     document.addEventListener("DOMContentLoaded", () => {
-        switchView('employees'); // This ensures the right tab starts active and calls fetchEmployees
+        switchView('employees');
         loadDropdowns();
     });
 </script>

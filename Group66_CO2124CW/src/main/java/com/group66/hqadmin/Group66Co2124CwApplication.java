@@ -21,9 +21,10 @@ public class Group66Co2124CwApplication {
             if (repository.findByUsername("admin").isEmpty()) {
                 AppUser admin = new AppUser();
                 admin.setUsername("admin");
-                // Important: Use the password encoder!
+
+
                 admin.setPassword(encoder.encode("admin123"));
-                admin.setRole("HR"); // This matches your SecurityConfig .hasRole("HR")
+                admin.setRole("HR");
                 repository.save(admin);
                 System.out.println("Admin user 'admin' created with password 'admin123'");
             }
@@ -60,7 +61,6 @@ public class Group66Co2124CwApplication {
 
 }
 
-/*"C:\Program Files\Java\jdk-21\bin\keytool.exe" -genkeypair -alias hqadmin -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 365*/
 //https://localhost:8443/login
 
 

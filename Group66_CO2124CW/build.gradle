@@ -70,3 +70,17 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+dependencies {
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true // This shows your console.log/System.out prints
+        exceptionFormat = "full"
+    }
+}

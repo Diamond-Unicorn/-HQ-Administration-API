@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
     // Standard CRUD methods are inherited automatically.
 
-    // Optional: Custom finder to look up a department by name
+    // finder to look up a department by name
     Optional<Department> findByName(String name);
 }
 

@@ -33,7 +33,7 @@ public class AuthRestController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // This line is the "Glue": It saves the login to the actual session
+            //  saves the login to the actual session
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 

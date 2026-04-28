@@ -1,0 +1,187 @@
+openapi: 3.0.3
+info:
+  title: HQ Admin API
+  description: Management API for HQ employees, departments, and assignments.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+
+paths:
+  /api/employees:
+    get:
+      summary: (1) List Employees
+      description: Retrieves a list of employees. Supports filtering by department.
+      parameters:
+        - name: department
+          in: query
+          description: Filter by department name (e.g., Logistics)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: (3) Create Employee
+      description: HR Only. Creates a new employee from a DTO.
+      parameters:
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: assignmentId
+          in: query
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Invalid input (e.g., bad email format)
+
+  /api/employees/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: (2) Get Employee Details
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Employee not found
+    put:
+      summary: (4) Update Employee
+      description: HR Only. Updates name, address, etc.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        '200':
+          description: Updated successfully
+    delete:
+      summary: (5) Delete Employee
+      description: HR Only. Removes employee record.
+      responses:
+        '204':
+          description: Deleted successfully
+
+  /api/employees/{id}/promote:
+    put:
+      summary: (10) Promote Employee
+      description: HR Only. Calculates salary increase. Returns 400 if tenure < 6 months.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Promotion successful
+        '400':
+          description: Ineligible for promotion
+
+  /api/departments:
+    get:
+      summary: (6) List Departments
+    post:
+      summary: (7) Create Department
+      description: HR Only. Validates positive budget.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+      responses:
+        '201':
+          description: Department created
+        '400':
+          description: Invalid budget
+
+  /api/assignments:
+    post:
+      summary: (8) Create Assignment
+      description: HR Only. Assigns an Employee to a Department.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [employeeId, departmentId]
+              properties:
+                employeeId:
+                  type: integer
+                departmentId:
+                  type: integer
+      responses:
+        '200':
+          description: Assigned successfully
+
+  /api/assignments/{id}:
+    delete:
+      summary: (9) Remove Assignment
+      description: HR Only. Unassigns an employee.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Assignment removed
+
+components:
+  schemas:
+    EmployeeInput:
+      type: object
+      required: [name, email, salary]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          pattern: '^[^@]+@[^@]+\.com$'
+          example: "worker@hq.com"
+        address:
+          type: string
+        salary:
+          type: number
+        contractType:
+          type: string
+          enum: [Full-Time, Part-Time, Contract]
+        startDate:
+          type: string
+          format: date
+
+    Department:
+      type: object
+      required: [name, budget]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location:
+          type: string
+        budget:
+          type: number
+          minimum: 0.01

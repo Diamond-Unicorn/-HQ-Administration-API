@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
-@EnableWebSecurity // Good practice to include this
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -31,16 +31,16 @@ public class SecurityConfig {
                // .requiresChannel(channel -> channel.anyRequest().requiresSecure())
 
                 .authorizeHttpRequests(auth -> auth
-                        // Make sure "/" and "/api/login" are truly open
+                        // Make sure "/" and "/api/login" are open
                         .requestMatchers("/", "/api/login", "/login", "/WEB-INF/jsp/**", "/static/**", "/favicon.ico", "/api/departments", "/api/assignments").permitAll()
-                        // Require HR role for destructive/sensitive actions if you want extra safety here
+                        // Require HR role for destructive/sensitive actions
                         //.requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("HR")
                         .anyRequest().authenticated()
                 )
 
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((request, response, authException) -> {
-                            // This is what the JS "fetch" will catch to show the login box
+                            // This is what the JS fetch will catch to show the login box
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json");
                             response.getWriter().write("{\"error\": \"Please log in first.\"}");
@@ -51,10 +51,10 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable()) // Disable the browser's popup login
 
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // This must match your JS fetch URL
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/") // Where to go after logout
                         .invalidateHttpSession(true) // Kill the session
-                        .deleteCookies("JSESSIONID") // Delete the "memory" cookie
+                        .deleteCookies("JSESSIONID") // Delete the memory cookie
                         .permitAll()
                 );
 

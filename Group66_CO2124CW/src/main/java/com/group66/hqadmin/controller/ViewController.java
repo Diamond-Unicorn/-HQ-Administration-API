@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
-    // This is the "Entry Point" for your entire application
+    // Entry Point for application
     @GetMapping("/")
     public String index() {
-        // This looks for /WEB-INF/jsp/index.jsp
-        // (Make sure your file is named index.jsp!)
+        // looks for /WEB-INF/jsp/index.jsp
         return "index";
     }
 }

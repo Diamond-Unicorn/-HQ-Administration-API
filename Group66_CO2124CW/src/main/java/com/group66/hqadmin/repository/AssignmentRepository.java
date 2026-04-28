@@ -10,9 +10,9 @@ import java.util.List;
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     // Standard CRUD methods are inherited automatically.
 
-    // Optional: Find all assignments for a specific employee ID
+    // Find all assignments for a specific employee ID
     List<Assignment> findByEmployeeId(Long employeeId);
 
-    // Optional: Find all assignments for a specific department ID
+    // Find all assignments for a specific department ID
     List<Assignment> findByDepartmentId(Long departmentId);
 }

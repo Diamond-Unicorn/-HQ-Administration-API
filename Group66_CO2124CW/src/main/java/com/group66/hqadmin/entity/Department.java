@@ -10,9 +10,9 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "departments") // Best practice: map to a specific table name
+@Table(name = "departments")
 @Data
-@NoArgsConstructor // Required by JPA
+@NoArgsConstructor
 @AllArgsConstructor
 public class Department {
 

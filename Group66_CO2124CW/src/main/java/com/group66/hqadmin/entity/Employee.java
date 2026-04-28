@@ -34,11 +34,11 @@ public class Employee {
     @Column(name = "address")
     private String address;
 
-    @ManyToOne // This tells Hibernate "This is an Entity, not a String"
+    @ManyToOne // This tells Hibernate this is an entity not a string
     @JsonIgnoreProperties("assignments")
     //@JsonBackReference // sets this as the child half. prevents infinite loop in json output
     //@JsonIgnoreProperties("employees") // prevents infinnte json loop on logging in
-    @JoinColumn(name = "department_id") // This creates the FK in your MySQL table
+    @JoinColumn(name = "department_id") // This creates the FK in MySQL table
     private Department department;
 
     // Getters and Setters

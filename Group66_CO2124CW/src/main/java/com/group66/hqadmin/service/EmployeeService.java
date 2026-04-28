@@ -20,10 +20,16 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        // Check eligibility
-        if (employee.getStartDate().isAfter(LocalDate.now().minusMonths(6))) {
-            return "ineligible";
+        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+
+        // If the start date is AFTER six months ago, they are too new.
+        if (employee.getStartDate().isAfter(sixMonthsAgo)) {
+            throw new IllegalArgumentException("Ineligible: Must work 6+ months");
         }
+        // Check eligibility
+       /* if (employee.getStartDate().isAfter(LocalDate.now().minusMonths(6))) {
+            return "ineligible";
+        } */
 
         // Perform promotion (10% raise)
         employee.setSalary(employee.getSalary() * 1.1);

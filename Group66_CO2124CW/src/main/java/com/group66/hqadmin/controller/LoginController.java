@@ -8,6 +8,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // This looks for /WEB-INF/jsp/login.jsp
+        return "login"; // looks for /WEB-INF/jsp/login.jsp
     }
 }

@@ -21,7 +21,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index"; // This serves the "Shell" page
+        return "index";
     }
 
     // Returns all data needed for the initial dashboard load
@@ -34,7 +34,7 @@ public class HomeController {
         return ResponseEntity.ok(data);
     }
 
-    // RESTful Search Endpoint
+    // restful Search Endpoint
     @GetMapping("/search")
     public ResponseEntity<List<Employee>> searchEmployees(@RequestParam("query") String query) {
         List<Employee> results = employeeRepository.findByNameContainingIgnoreCase(query);

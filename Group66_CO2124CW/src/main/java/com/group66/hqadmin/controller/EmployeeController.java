@@ -36,7 +36,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    // 1. Promote Employee (Changed from GET to POST, as it modifies data)
+    // 1. Promote Employee
     @PutMapping("/{id}/promote")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> promoteEmployee(@PathVariable Long id) {
@@ -45,19 +45,19 @@ public class EmployeeController {
 
         // Requirement: Returns 400 Bad Request if started < 6 months ago
         if (emp.getStartDate().isAfter(LocalDate.now().minusMonths(6))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Employee has not reached the 6-month requirement.");
+            /*return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Employee has not reached the 6-month requirement."); */
+            throw new IllegalArgumentException("Ineligible: Must work 6+ months");
         }
+
 
         // Business Logic: 10% raise
         emp.setSalary(emp.getSalary() * 1.10);
-        // You could also update a 'rank' field here if you have one!
 
         employeeRepository.save(emp);
         return ResponseEntity.ok("Promoted! Salary is now " + emp.getSalary());
     }
     // 2. Get Data for Forms
-    // REST APIs don't serve HTML forms. Instead, they serve the data the frontend needs to build the dropdowns.
     @GetMapping("/form-data")
     public ResponseEntity<Map<String, Object>> getFormData() {
         Map<String, Object> response = new HashMap<>();
@@ -67,7 +67,6 @@ public class EmployeeController {
     }
 
     // 3. Process the Creation (POST)
-    // Uses @RequestBody expecting a JSON payload instead of @ModelAttribute
     @PostMapping("/")
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee,
                                                  @RequestParam("departmentId") Long deptId,
@@ -86,8 +85,8 @@ public class EmployeeController {
 
     }
 
-    // 4. Delete Employee (Changed from GET to standard DELETE mapping)
-    @DeleteMapping("/{id}") // This matches /api/employees/6
+    // 4. Delete Employee
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         return employeeRepository.findById(id)
                 .map(employee -> {
@@ -98,7 +97,7 @@ public class EmployeeController {
     }
 
     // 5. Get Single Employee for Editing (GET)
-// helps fulfill '2. GET /api/employees/{id} (Roles: Manager, HR)
+// helps fulfill 2. GET /api/employees/{id} (Roles: Manager, HR)
 //o Retrieves details of a single employee. Returns 404 if not found.
     // Handles both the ID Lookup search and the Edit Modal data fetch
     @GetMapping("/{id}")
@@ -108,7 +107,7 @@ public class EmployeeController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // Returns 404 if missing
     }
 
-    // 6. Process the Update (Changed to PUT mapping, standard for updates)
+    // 6. Process the Update
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable Long id,
                                                    @RequestBody Employee updatedDetails,
